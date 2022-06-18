@@ -1,9 +1,7 @@
 events/
 logs/
-bins/
 .idea/
 tmp
 .env
 test/
-log/
 event/
