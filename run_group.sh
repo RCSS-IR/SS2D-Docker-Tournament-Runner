@@ -6,6 +6,7 @@ NETWORK=
 GAME_LIST=
 ROOT_LOG_DIR=${here}/logs
 ROOT_EVENT_DIR=${here}/events
+TAG='latest'
 
 printHelp() {
   echo "
@@ -18,6 +19,7 @@ printHelp() {
         -ut, --use-telegram                             will use telegram
         -ud, --use-discord                              will use discord
         -ug, --use-google-drive                         will use google drive
+        -t,  --tag                                      image tag
     "
 }
 
@@ -57,6 +59,11 @@ checkParams() {
     -ug | --use-google-drive)
       USE_GDRIVE=1
       shift
+      ;;
+    -t | --tag)
+      TAG="$2"
+      shift # past argument
+      shift # past value
       ;;
     *) # unknown option
       POSITIONAL+=("$1") # save it in an array for later
@@ -141,7 +148,7 @@ main() {
     RUN "chmod 777 $EVENT_DIR -R"
     echo "**********************************************************"
     echo "${line}"
-    PARAMS="-ts ${TIME_STAMP} -st ${game_conf[1]} -gt ${game_conf[2]} -ld ${LOG_DIR} -ed ${EVENT_DIR} -l ${game_conf[3]} -r ${game_conf[4]} -n ${NETWORK}"
+    PARAMS="-ts ${TIME_STAMP} -st ${game_conf[1]} -gt ${game_conf[2]} -ld ${LOG_DIR} -ed ${EVENT_DIR} -l ${game_conf[3]} -r ${game_conf[4]} -n ${NETWORK} -t ${TAG}"
     if [[ "$USE_TELEGRAM" == 1 ]]; then
       PARAMS="${PARAMS} -ut "
     fi

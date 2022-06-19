@@ -9,6 +9,7 @@ SS2D_TYPE=major
 GAME_TYPE=league
 TEAM_LEFT=
 TEAM_RIGHT=
+TAG='latest'
 NETWORK=
 GAME_TIME=$(date -u +%H:%M:%S)
 TIME_STAMP="G$( (tr -dc A-Za-z0-9 </dev/urandom | head -c 5) && echo '')P"
@@ -52,6 +53,7 @@ printHelp() {
         -ed, --event_directory                          server and event directory
         -l , --team_left                                left team to run
         -r , --right_team                               right team to run
+        -t , --tag                                      image tag=latest
         -n , --network                                  network
         -sp, --server-port                              server port
         -ut, --use-telegram                             will use telegram
@@ -94,6 +96,11 @@ checkParams() {
       ;;
     -r | --right_team)
       TEAM_RIGHT="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -t | --tag)
+      TAG="$2"
       shift # past argument
       shift # past value
       ;;
@@ -257,7 +264,7 @@ runServer() {
   opt=""
   opt="${opt} --network $NETWORK --ip ${SERVER_IP}"
   opt="${opt} --hostname ${HOST_NAME} -p ${SERVER_PORT}:6000/udp"
-  opt="${opt} -v ${LOG_DIR}:/home/ss2dtr/log --name ${NETWORK}_server"
+  opt="${opt} -v ${LOG_DIR}:/home/nader/log --name ${NETWORK}_server"
   opt="${opt} -e config_file=${SERVER_CONF} -e DATE_FORMAT=\"${TIME_STAMP}_${NETWORK}_\""
   opt="${opt} rcssserver:latest"
   
@@ -298,7 +305,7 @@ RUN_LEFT_TEAM() {
     fi
 
     opt="${opt} -e num=${num} -e ip=${SERVER_IP}"
-    opt="${opt} ${TEAM_LEFT}:latest"
+    opt="${opt} ${TEAM_LEFT}:${TAG}"
 
     LEFT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.l_${TEAM_LEFT}_player"
 
@@ -319,7 +326,7 @@ RUN_RIGHT_TEAM() {
     fi
 
     opt="${opt} -e num=${num} -e ip=${SERVER_IP}"
-    opt="${opt} ${TEAM_RIGHT}:latest"
+    opt="${opt} ${TEAM_RIGHT}:${TAG}"
 
     RIGHT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.r_${TEAM_RIGHT}_player"
 

@@ -9,6 +9,7 @@ ROOT_EVENT_DIR=${here}/events
 USE_TELEGRAM=1
 GROUP_NAME=
 LEAGUE_TYPE=
+TAG='latest'
 
 printHelp() {
   echo "
@@ -23,6 +24,7 @@ printHelp() {
         -ug, --use-google-drive                         will use google drive
 				-gn , --group-name                              group name
 				-st, --ss2d-type [starter OR major]             type of competition
+        -t,  --tag                                      image tag
     "
 }
 
@@ -72,6 +74,11 @@ checkParams() {
     -ug | --use-google-drive)
       USE_GDRIVE=1
       shift
+      ;;
+    -t | --tag)
+      TAG="$2"
+      shift # past argument
+      shift # past value
       ;;
     *) # unknown option
       POSITIONAL+=("$1") # save it in an array for later
@@ -157,7 +164,7 @@ main() {
 		RUN "chmod 777 $EVENT_DIR -R"
 		echo "**********************************************************"
 		echo "($newteam)"
-		PARAMS="-ts $TIME_STAMP -st ${LEAGUE_TYPE} -gt cup -ld ${LOG_DIR} -ed ${EVENT_DIR} -l ${winner} -r ${newteam} -n ${NETWORK}"
+		PARAMS="-ts $TIME_STAMP -st ${LEAGUE_TYPE} -gt cup -ld ${LOG_DIR} -ed ${EVENT_DIR} -l ${winner} -r ${newteam} -n ${NETWORK} -t ${TAG}"
 		if [[ "$USE_TELEGRAM" == 1 ]]; then
       PARAMS="${PARAMS} -ut "
     fi
@@ -182,4 +189,3 @@ main() {
 
 main "$@"
 exit 0
-

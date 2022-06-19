@@ -6,6 +6,7 @@
 source ./utils.sh
 
 NAME=
+TAG='latest'
 
 #------------------------------------------------------------
 
@@ -14,6 +15,7 @@ printHelp() {
      Usage : ./build_team.sh [OPTIONS]
      Options:
         -n , --name                                  name
+        -t , --tag
     "
 }
 
@@ -24,6 +26,11 @@ checkParams() {
     case $key in
     -n | --name)
       NAME="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -t | --tag)
+      TAG="$2"
       shift # past argument
       shift # past value
       ;;
@@ -47,7 +54,7 @@ buildTeam() {
   echo "--- BUILDING ${NAME}"
   cp teams.Dockerfile bins/${NAME}/Dockerfile
   chmod -R 777 bins/${NAME}/*
-  RUN "docker build -t ${NAME}:latest bins/${NAME}" -po
+  RUN "docker build -t ${NAME}:${TAG} bins/${NAME}" -po
   echo "--- END BUILDING ${NAME}"
 }
 

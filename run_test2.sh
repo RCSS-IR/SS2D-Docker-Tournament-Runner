@@ -217,7 +217,7 @@ findEmptyServer() {
 runTest() {
   echo "--- running test"
   printParams
-  RUN "./run_game.sh -st ${SS2D_TYPE} -gt ${GAME_TYPE} -ld ${LOG_DIR} -ed ${LOG_DIR} -l ${TEST_TEAM_NAME} -r ${TEAM_RIGHT} -n ${TEST_SERVER_NAME}" -po
+  RUN "./run_game.sh -st ${SS2D_TYPE} -gt ${GAME_TYPE} -ld ${LOG_DIR} -ed ${LOG_DIR} -l ${TEST_TEAM_NAME} -r ${TEAM_RIGHT} -n ${TEST_SERVER_NAME} -ns" -po
   echo "--- end running test"
 }
 
