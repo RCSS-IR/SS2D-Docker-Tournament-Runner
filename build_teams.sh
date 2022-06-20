@@ -4,6 +4,7 @@
 
 source ./utils.sh
 TAG='latest'
+DockerfileName='Dockerfile'
 #------------------------------------------------------------
 
 printHelp() {
@@ -24,6 +25,11 @@ checkParams() {
       shift # past argument
       shift # past value
       ;;
+    -f | --f)
+      DockerfileName="$2"
+      shift # past argument
+      shift # past value
+      ;;
     *) # unknown option
       POSITIONAL+=("$1") # save it in an array for later
       shift              # past argument
@@ -41,7 +47,7 @@ checkParams() {
 
 buildTeams() {
   for team in $(ls bins); do
-    RUN "bash build_team.sh -n ${team} -t ${TAG}" -po
+    RUN "bash build_team.sh -n ${team} -t ${TAG} -f ${DockerfileName}" -po
   done
 }
 

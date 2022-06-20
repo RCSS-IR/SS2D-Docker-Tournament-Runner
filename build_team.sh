@@ -7,7 +7,7 @@ source ./utils.sh
 
 NAME=
 TAG='latest'
-
+DockerfileName='Dockerfile'
 #------------------------------------------------------------
 
 printHelp() {
@@ -16,6 +16,7 @@ printHelp() {
      Options:
         -n , --name                                  name
         -t , --tag
+        -f , --f                                     docker file name
     "
 }
 
@@ -31,6 +32,11 @@ checkParams() {
       ;;
     -t | --tag)
       TAG="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -f | --f)
+      DockerfileName="$2"
       shift # past argument
       shift # past value
       ;;
@@ -53,8 +59,9 @@ checkParams() {
 buildTeam() {
   echo "--- BUILDING ${NAME}"
   cp teams.Dockerfile bins/${NAME}/Dockerfile
+  cp challenge.Dockerfile bins/${NAME}/challenge.Dockerfile
   chmod -R 777 bins/${NAME}/*
-  RUN "docker build -t ${NAME}:${TAG} bins/${NAME}" -po
+  RUN "docker build -t ${NAME}:${TAG} -f bins/${NAME}/${DockerfileName} bins/${NAME}" -po
   echo "--- END BUILDING ${NAME}"
 }
 
