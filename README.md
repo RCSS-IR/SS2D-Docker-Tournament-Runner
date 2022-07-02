@@ -27,7 +27,13 @@ This dot-env file is for Telegram bot config, If you don't want to use Telegram 
 cp .env.example .env
 ```
 
-build docker files:
+Save IpTables default routes
+
+```bash
+sudo iptables-save > default-routes.txt
+```
+
+Build docker files:
 
 ```console
 ./build_all.sh
