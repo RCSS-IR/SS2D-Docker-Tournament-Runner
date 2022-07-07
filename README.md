@@ -18,7 +18,7 @@ To run properly, you need JQ and Docker.
 
 after installing the requirements, we have some config to make
 
-## quick-start
+## TL;DR | quick start
 
 You need to make a .env file from .env.example.
 This dot-env file is for Telegram bot config, If you don't want to use Telegram leave it without any change.
