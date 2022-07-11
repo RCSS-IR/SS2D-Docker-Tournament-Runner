@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:latest
 MAINTAINER Nader nader.zare@gmail.com
 ENV pp=6000
 ENV cp=6002
