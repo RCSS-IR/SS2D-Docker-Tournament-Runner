@@ -153,7 +153,7 @@ EOT
     esac
     shift $(($# > 0 ? 1 : 0))
   done
-
+echo $USE_DISCORD
   tel_msg=$msg
   tel_msg="${tel_msg//'\n'/$'\n'}"
   if [ $USE_TELEGRAM -eq 1 ]; then

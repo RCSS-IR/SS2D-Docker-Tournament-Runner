@@ -202,6 +202,8 @@ checkServerConf() {
       SERVER_CONF="server_league.conf"
     elif [ $GAME_TYPE = "cup" ]; then
       SERVER_CONF="server_cup.conf"
+    elif [ $GAME_TYPE = "challenge" ]; then
+      SERVER_CONF="server_challenge.conf"
     else
       SERVER_CONF="server_test.conf"
     fi
@@ -294,7 +296,12 @@ waitForServer() {
 }
 
 RUN_LEFT_TEAM() {
-  for num in {1..12}; do
+  LEFT_TEAM_A=$(cut -d'_' -f1 <<< "$TEAM_LEFT")
+  LEFT_TEAM_B=$(cut -d'_' -f2 <<< "$TEAM_LEFT")
+  echo $LEFT_TEAM_A
+  echo $LEFT_TEAM_B
+  echo $TAG
+  for num in {1..6}; do
     opt=""
     opt="${opt} --name ${NETWORK}_team_${TEAM_LEFT}_${num}"
     opt="${opt} --network ${NETWORK}"
@@ -304,8 +311,26 @@ RUN_LEFT_TEAM() {
       opt="${opt} --cpuset-cpus ${LEFT_FIRST_CORE}-${LEFT_LAST_CORE}"
     fi
 
-    opt="${opt} -e num=${num} -e ip=${SERVER_IP}"
-    opt="${opt} ${TEAM_LEFT}:${TAG}"
+    opt="${opt} -e num=${num} -e ip=${SERVER_IP} -e name=${TEAM_LEFT}"
+    opt="${opt} ${LEFT_TEAM_A}:${TAG}"
+
+    LEFT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.l_${TEAM_LEFT}_player"
+
+    RUN "docker run ${opt}" -bg -nc -co "${EVENT_DIR}/${LEFT_LOG_FILE_NAME}${num}.log"
+    sleep 2
+  done
+  for num in {7..12}; do
+    opt=""
+    opt="${opt} --name ${NETWORK}_team_${TEAM_LEFT}_${num}"
+    opt="${opt} --network ${NETWORK}"
+
+    if (($USE_RESOURCE_LIMIT)); then
+      opt="${opt} --memory ${LEFT_TEAM_RAM_LIMIT}"
+      opt="${opt} --cpuset-cpus ${LEFT_FIRST_CORE}-${LEFT_LAST_CORE}"
+    fi
+
+    opt="${opt} -e num=${num} -e ip=${SERVER_IP} -e name=${TEAM_LEFT}"
+    opt="${opt} ${LEFT_TEAM_B}:${TAG}"
 
     LEFT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.l_${TEAM_LEFT}_player"
 
@@ -315,7 +340,9 @@ RUN_LEFT_TEAM() {
 }
 
 RUN_RIGHT_TEAM() {
-  for num in {1..12}; do
+  RIGHT_TEAM_A=$(cut -d'_' -f1 <<< "$TEAM_RIGHT")
+  RIGHT_TEAM_B=$(cut -d'_' -f2 <<< "$TEAM_RIGHT")
+  for num in {1..6}; do
     opt=""
     opt="${opt} --name ${NETWORK}_team_${TEAM_RIGHT}_${num}"
     opt="${opt} --network ${NETWORK}"
@@ -325,8 +352,26 @@ RUN_RIGHT_TEAM() {
       opt="${opt} --cpuset-cpus ${RIGHT_FIRST_CORE}-${RIGHT_LAST_CORE}"
     fi
 
-    opt="${opt} -e num=${num} -e ip=${SERVER_IP}"
-    opt="${opt} ${TEAM_RIGHT}:${TAG}"
+    opt="${opt} -e num=${num} -e ip=${SERVER_IP} -e name=${TEAM_RIGHT}"
+    opt="${opt} ${RIGHT_TEAM_A}:${TAG}"
+
+    RIGHT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.r_${TEAM_RIGHT}_player"
+
+    RUN "docker run ${opt}" -bg -nc -co "${EVENT_DIR}/${RIGHT_LOG_FILE_NAME}${num}.log"
+    sleep 2
+  done
+    for num in {7..12}; do
+    opt=""
+    opt="${opt} --name ${NETWORK}_team_${TEAM_RIGHT}_${num}"
+    opt="${opt} --network ${NETWORK}"
+
+    if (($USE_RESOURCE_LIMIT)); then
+      opt="${opt} --memory ${RIGHT_TEAM_RAM_LIMIT}"
+      opt="${opt} --cpuset-cpus ${RIGHT_FIRST_CORE}-${RIGHT_LAST_CORE}"
+    fi
+
+    opt="${opt} -e num=${num} -e ip=${SERVER_IP} -e name=${TEAM_RIGHT}"
+    opt="${opt} ${RIGHT_TEAM_B}:${TAG}"
 
     RIGHT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.r_${TEAM_RIGHT}_player"
 

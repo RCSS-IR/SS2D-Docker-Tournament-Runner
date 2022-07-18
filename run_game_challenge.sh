@@ -202,6 +202,8 @@ checkServerConf() {
       SERVER_CONF="server_league.conf"
     elif [ $GAME_TYPE = "cup" ]; then
       SERVER_CONF="server_cup.conf"
+    elif [ $GAME_TYPE = "challenge" ]; then
+      SERVER_CONF="server_challenge.conf"
     else
       SERVER_CONF="server_test.conf"
     fi
@@ -299,6 +301,9 @@ RUN_LEFT_TEAM() {
   echo $LEFT_TEAM_A
   echo $LEFT_TEAM_B
   echo $TAG
+  SUB_LEFT_TEAM_A=${LEFT_TEAM_A:0:4}
+  SUB_LEFT_TEAM_B=${LEFT_TEAM_B:0:4}
+  SUB_LEFT_TEAM=${SUB_LEFT_TEAM_A}_${SUB_LEFT_TEAM_B}
   for num in {1..6}; do
     opt=""
     opt="${opt} --name ${NETWORK}_team_${TEAM_LEFT}_${num}"
@@ -309,10 +314,10 @@ RUN_LEFT_TEAM() {
       opt="${opt} --cpuset-cpus ${LEFT_FIRST_CORE}-${LEFT_LAST_CORE}"
     fi
 
-    opt="${opt} -e num=${num} -e ip=${SERVER_IP} -e name=${TEAM_LEFT}"
+    opt="${opt} -e num=${num} -e ip=${SERVER_IP} -e name=${SUB_LEFT_TEAM}"
     opt="${opt} ${LEFT_TEAM_A}:${TAG}"
 
-    LEFT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.l_${TEAM_LEFT}_player"
+    LEFT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.l_${SUB_LEFT_TEAM}_player"
 
     RUN "docker run ${opt}" -bg -nc -co "${EVENT_DIR}/${LEFT_LOG_FILE_NAME}${num}.log"
     sleep 2
@@ -327,10 +332,10 @@ RUN_LEFT_TEAM() {
       opt="${opt} --cpuset-cpus ${LEFT_FIRST_CORE}-${LEFT_LAST_CORE}"
     fi
 
-    opt="${opt} -e num=${num} -e ip=${SERVER_IP} -e name=${TEAM_LEFT}"
+    opt="${opt} -e num=${num} -e ip=${SERVER_IP} -e name=${SUB_LEFT_TEAM}"
     opt="${opt} ${LEFT_TEAM_B}:${TAG}"
 
-    LEFT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.l_${TEAM_LEFT}_player"
+    LEFT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.l_${SUB_LEFT_TEAM}_player"
 
     RUN "docker run ${opt}" -bg -nc -co "${EVENT_DIR}/${LEFT_LOG_FILE_NAME}${num}.log"
     sleep 2
@@ -340,6 +345,9 @@ RUN_LEFT_TEAM() {
 RUN_RIGHT_TEAM() {
   RIGHT_TEAM_A=$(cut -d'_' -f1 <<< "$TEAM_RIGHT")
   RIGHT_TEAM_B=$(cut -d'_' -f2 <<< "$TEAM_RIGHT")
+  SUB_RIGHT_TEAM_A=${RIGHT_TEAM_A:0:4}
+  SUB_RIGHT_TEAM_B=${RIGHT_TEAM_B:0:4}
+  SUB_RIGHT_TEAM=${SUB_RIGHT_TEAM_A}_${SUB_RIGHT_TEAM_B}
   for num in {1..6}; do
     opt=""
     opt="${opt} --name ${NETWORK}_team_${TEAM_RIGHT}_${num}"
@@ -350,10 +358,10 @@ RUN_RIGHT_TEAM() {
       opt="${opt} --cpuset-cpus ${RIGHT_FIRST_CORE}-${RIGHT_LAST_CORE}"
     fi
 
-    opt="${opt} -e num=${num} -e ip=${SERVER_IP} -e name=${TEAM_RIGHT}"
+    opt="${opt} -e num=${num} -e ip=${SERVER_IP} -e name=${SUB_RIGHT_TEAM}"
     opt="${opt} ${RIGHT_TEAM_A}:${TAG}"
 
-    RIGHT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.r_${TEAM_RIGHT}_player"
+    RIGHT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.r_${SUB_RIGHT_TEAM}_player"
 
     RUN "docker run ${opt}" -bg -nc -co "${EVENT_DIR}/${RIGHT_LOG_FILE_NAME}${num}.log"
     sleep 2
@@ -368,10 +376,10 @@ RUN_RIGHT_TEAM() {
       opt="${opt} --cpuset-cpus ${RIGHT_FIRST_CORE}-${RIGHT_LAST_CORE}"
     fi
 
-    opt="${opt} -e num=${num} -e ip=${SERVER_IP} -e name=${TEAM_RIGHT}"
+    opt="${opt} -e num=${num} -e ip=${SERVER_IP} -e name=${SUB_RIGHT_TEAM}"
     opt="${opt} ${RIGHT_TEAM_B}:${TAG}"
 
-    RIGHT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.r_${TEAM_RIGHT}_player"
+    RIGHT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.r_${SUB_RIGHT_TEAM}_player"
 
     RUN "docker run ${opt}" -bg -nc -co "${EVENT_DIR}/${RIGHT_LOG_FILE_NAME}${num}.log"
     sleep 2
