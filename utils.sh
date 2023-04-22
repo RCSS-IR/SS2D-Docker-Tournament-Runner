@@ -228,7 +228,7 @@ EOT
     handleFailed $EXIT_CODE "- FAILED to send FILE in PUBLIC channel (B)" "+ a FILE sent to PUBLIC channel"
   fi
   if [ $USE_GDRIVE -eq 1 ]; then
-    RUN "./gdrive upload -p ${GOOGLE_DRIVE_PARENT} ${FILE_LOCATION}" -po
+    RUN "./gdrive files upload --recursive --parent ${GOOGLE_DRIVE_PARENT} ${FILE_LOCATION}" -po
   fi
 }
 SEND_FILE_PRIVATE() {
@@ -296,25 +296,29 @@ EOT
 }
 
 CREATE_DIRECTORY_IN_GDRIVE() {
-  GROUP_NAME=$1
-  TEMP_FILE_NAME="TEMP$(($RANDOM))"
-  ./gdrive list | grep dir > $TEMP_FILE_NAME
-  path=""
-  exist=0
-  while read -r line
-  do
-    array=( $line )
-    dir_name=${array[1]}
-    if [ "$dir_name" = "$GROUP_NAME" ]; then
-      path=${array[0]}
+  local GROUP_NAME=$1
+  local FOLDERS
+  ./gdrive files list | grep folder > $FOLDERS
+
+  # output structure
+  # ID  NAME  TYPE  SIZE  CREATED MODIFIED
+
+  local exist=0
+  local path=""
+  while IFS= read -r line; do
+    local line=( $line )
+    if [ ${line[1]} == $GROUP_NAME ]; then
       exist=1
+      path=${line[0]}
+      break
     fi
-  done < "$TEMP_FILE_NAME"
+  done <"$FOLDERS"
+
   if [ $exist -eq 0 ]; then
-    res=`./gdrive mkdir $GROUP_NAME`
+    res=$(./gdrive files mkdir $GROUP_NAME)
     res=( $res )
     path=${res[1]}
   fi
-  rm $TEMP_FILE_NAME
+  
   echo $path
 } 
