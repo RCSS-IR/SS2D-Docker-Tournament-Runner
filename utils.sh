@@ -296,29 +296,39 @@ EOT
 }
 
 CREATE_DIRECTORY_IN_GDRIVE() {
-  local GROUP_NAME=$1
-  local FOLDERS
-  ./gdrive files list | grep folder > $FOLDERS
-
-  # output structure
+  GROUP_NAME=$1
+  
+  # ./gdrive files list
+  # output structure (with tab delimiter)
   # ID  NAME  TYPE  SIZE  CREATED MODIFIED
 
-  local exist=0
-  local path=""
-  while IFS= read -r line; do
-    local line=( $line )
-    if [ ${line[1]} == $GROUP_NAME ]; then
+  # see if there is a folder name $GROUP_NAME in the google drive
+  FOLDERS=$(./gdrive files list --field-separator '|' --skip-header|grep -E "folder"| cut -d'|' -f1,2)
+
+  FOLDER_NAMES=$(echo "$FOLDERS" | cut -d'|' -f2)
+  FOLDER_IDS=$(echo "$FOLDERS" | cut -d'|' -f1)
+
+  # turn the string into array
+  FOLDER_NAMES=($FOLDER_NAMES)
+  FOLDER_IDS=($FOLDER_IDS)
+
+  # check if the folder name exists return the id of the folder
+  exist=0
+  ID=''
+  for i in "${!FOLDER_NAMES[@]}"; do
+    if [ "${FOLDER_NAMES[$i]}" == "$GROUP_NAME" ]; then
       exist=1
-      path=${line[0]}
+      ID="${FOLDER_IDS[$i]}"
       break
     fi
-  done <"$FOLDERS"
+  done
+
 
   if [ $exist -eq 0 ]; then
     res=$(./gdrive files mkdir $GROUP_NAME)
-    res=( $res )
-    path=${res[1]}
+    ID=$(echo $res | cut -d':' -f2)
+    ID=$(echo $ID | cut -d' ' -f2)
   fi
   
-  echo $path
-} 
+  echo $ID
+}
