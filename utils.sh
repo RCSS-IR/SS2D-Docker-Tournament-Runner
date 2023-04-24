@@ -332,3 +332,8 @@ CREATE_DIRECTORY_IN_GDRIVE() {
   
   echo $ID
 }
+
+
+LIST_DOCKER_CONTAINER_NAMES_AND_STATUS () {
+  docker ps --format '{{.Names}} {{.Status}}'
+}
