@@ -150,12 +150,15 @@ main() {
     echo "${line}"
     PARAMS="-ts ${TIME_STAMP} -st ${game_conf[1]} -gt ${game_conf[2]} -ld ${LOG_DIR} -ed ${EVENT_DIR} -l ${game_conf[3]} -r ${game_conf[4]} -n ${NETWORK} -t ${TAG}"
     if [[ "$USE_TELEGRAM" == 1 ]]; then
+      echo "use telegram"
       PARAMS="${PARAMS} -ut "
     fi
     if [[ "$USE_DISCORD" == 1 ]]; then
+      echo "use discord"
       PARAMS="${PARAMS} -ud "
     fi
     if [[ "$USE_GDRIVE" == 1 ]]; then
+      echo "use google drive"
       GOOGLE_DRIVE_PARENT=$(CREATE_DIRECTORY_IN_GDRIVE $GROUP_NAME)
       PARAMS="${PARAMS} -ug -gdp $GOOGLE_DRIVE_PARENT"
     fi
