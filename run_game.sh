@@ -194,6 +194,8 @@ checkServerConf() {
       SERVER_CONF="server_starter_league.conf"
     elif [ $GAME_TYPE = "cup" ]; then
       SERVER_CONF="server_starter_cup.conf"
+    elif [ $GAME_TYPE = "check" ]; then
+      SERVER_CONF="server_starter_check.conf"  
     else
       SERVER_CONF="server_starter_test.conf"
     fi
@@ -202,6 +204,8 @@ checkServerConf() {
       SERVER_CONF="server_league.conf"
     elif [ $GAME_TYPE = "cup" ]; then
       SERVER_CONF="server_cup.conf"
+    elif [ $GAME_TYPE = "check" ]; then
+      SERVER_CONF="server_check.conf"
     else
       SERVER_CONF="server_test.conf"
     fi
