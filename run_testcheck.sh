@@ -172,6 +172,16 @@ createLogDirectory() {
   RUN "mkdir -p \"$LOG_DIR\"" -nc
 }
 
+buildCheckTeam() {
+  echo "--- BUILDING ${NAME}"
+  RUN "cp teams.Dockerfile $TEAM_LEFT_BINARY_LOCATION/Dockerfile" -po
+  RUN "chmod 777 $TEAM_LEFT_BINARY_LOCATION/bin/* -R" -po
+  OLD_PWD=$PWD
+  RUN "cd $TEAM_LEFT_BINARY_LOCATION && docker build -t $TEST_TEAM_NAME:latest ." -ef
+  cd $OLD_PWD
+  echo "--- END BUILDING ${NAME}"
+}
+
 buildTestBinary() {
   echo "--- start build ${TEAM_NAME}"
   RUN "mkdir $TEAM_LEFT_BINARY_LOCATION/../bin" -po
@@ -263,7 +273,8 @@ main() {
   checkParams "$@"
   #  clear
   createLogDirectory
-  buildTestBinary
+  # buildTestBinary
+  buildCheckTeam
   findEmptyServer
   runTest
   emptyUsedTestServer
