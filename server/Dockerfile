@@ -28,13 +28,13 @@ RUN useradd -m -s /bin/bash ss2dtr && \
     chmod 777 /home -R
 
 
-COPY ./server/rcssserver-17.0.1.tar.gz /materials/rcssserver-17.0.1.tar.gz
+COPY ./server/rcssserver.tar.gz /materials/rcssserver.tar.gz
 
 RUN mkdir /home/ss2dtr/rcssserver &&\
     cd /home/ss2dtr/rcssserver && \
-    cp /materials/rcssserver-17.0.1.tar.gz . && \
-    tar -xzvf rcssserver-17.0.1.tar.gz && \
-    mv ./rcssserver-17.0.1/  ./server/ && \
+    cp /materials/rcssserver.tar.gz . && \
+    tar -xzvf rcssserver.tar.gz && \
+    mv ./rcssserver*/  ./server/ && \
     cd ./server/  && \
     ./configure --prefix=`pwd`/server-bin && \
     make && \

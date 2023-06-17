@@ -1,5 +1,4 @@
-FROM ubuntu:latest
-MAINTAINER Nader nader.zare@gmail.com
+FROM ubuntu:22.04
 ENV pp=6000
 ENV cp=6002
 ENV ip=127.0.0.1
