@@ -278,6 +278,7 @@ runServer() {
   
   SERVER_LOG_FILE_NAME=${TIME_STAMP}_${NETWORK}.server.log
   RUN "docker run ${opt}" -bg -co "${EVENT_DIR}/${SERVER_LOG_FILE_NAME}"
+  # RUN "docker run ${opt}" -bg
   sleep 1
   echo "--- end running rcssserver"
 }
@@ -314,10 +315,13 @@ RUN_LEFT_TEAM() {
 
     opt="${opt} -e num=${num} -e ip=${SERVER_IP}"
     opt="${opt} ${TEAM_LEFT}:${TAG}"
-
+    opt="${opt} --log-driver local --log-opt max-size=10m"
+    
     LEFT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.l_${TEAM_LEFT}_player"
 
-    RUN "docker run ${opt}" -bg -nc -co "${EVENT_DIR}/${LEFT_LOG_FILE_NAME}${num}.log"
+    #RUN "docker run ${opt}" -bg -nc -co "${EVENT_DIR}/${LEFT_LOG_FILE_NAME}${num}.log"
+    RUN "docker run ${opt}" -bg -nc
+
     sleep 2
   done
 }
@@ -335,10 +339,12 @@ RUN_RIGHT_TEAM() {
 
     opt="${opt} -e num=${num} -e ip=${SERVER_IP}"
     opt="${opt} ${TEAM_RIGHT}:${TAG}"
+    opt="${opt} --log-driver local --log-opt max-size=10m"
 
     RIGHT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.r_${TEAM_RIGHT}_player"
 
-    RUN "docker run ${opt}" -bg -nc -co "${EVENT_DIR}/${RIGHT_LOG_FILE_NAME}${num}.log"
+    #RUN "docker run ${opt}" -bg -nc -co "${EVENT_DIR}/${RIGHT_LOG_FILE_NAME}${num}.log"
+    RUN "docker run ${opt}" -bg -nc
     sleep 2
   done
 }
