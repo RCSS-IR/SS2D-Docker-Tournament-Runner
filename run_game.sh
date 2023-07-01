@@ -25,7 +25,11 @@ SERVER_PORT=6000
 RUN_IN_SERVER=
 CPU_COUNT=$(lscpu | grep "^CPU(s)" | grep -P -o "[0-9]+")
 SERVER_CONF=
-USE_RESOURCE_LIMIT=0
+
+# if use resource limit is defined use it otherwise use 0 
+if [ -z "$USE_RESOURCE_LIMIT" ]; then
+  USE_RESOURCE_LIMIT=0
+fi
 LEFT_TEAM_RAM_LIMIT=
 RIGHT_TEAM_RAM_LIMIT=
 LEFT_FIRST_CORE=
