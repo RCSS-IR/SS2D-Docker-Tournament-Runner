@@ -12,4 +12,4 @@ RUN chmod o=rx /home/ -R
 COPY bin /home/
 USER team
 WORKDIR /home/
-CMD ["bash", "-c", "./start ${ip} ${run_path} ${num} > /dev/null 2>&1"]
+CMD ["bash", "-c", "./start ${ip} ${run_path} ${num}"]
