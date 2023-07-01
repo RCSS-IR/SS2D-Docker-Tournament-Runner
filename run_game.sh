@@ -319,8 +319,8 @@ RUN_LEFT_TEAM() {
     
     LEFT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.l_${TEAM_LEFT}_player"
 
-    #RUN "docker run ${opt}" -bg -nc -co "${EVENT_DIR}/${LEFT_LOG_FILE_NAME}${num}.log"
-    RUN "docker run ${opt}" -bg -nc
+    RUN "docker run ${opt}" -bg -nc -co "${EVENT_DIR}/${LEFT_LOG_FILE_NAME}${num}.log"
+    # RUN "docker run ${opt}" -bg -nc
 
     sleep 2
   done
@@ -343,8 +343,8 @@ RUN_RIGHT_TEAM() {
 
     RIGHT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.r_${TEAM_RIGHT}_player"
 
-    #RUN "docker run ${opt}" -bg -nc -co "${EVENT_DIR}/${RIGHT_LOG_FILE_NAME}${num}.log"
-    RUN "docker run ${opt}" -bg -nc
+    RUN "docker run ${opt}" -bg -nc -co "${EVENT_DIR}/${RIGHT_LOG_FILE_NAME}${num}.log"
+    # RUN "docker run ${opt}" -bg -nc
     sleep 2
   done
 }
