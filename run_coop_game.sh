@@ -352,7 +352,7 @@ RUN_RIGHT_TEAM() {
     fi
 
     opt="${opt} -e num=${num} -e ip=${SERVER_IP} -e name=${TEAM_RIGHT}"
-    opt="${opt} ${RIGHT_TEAM_A}:${TAG} bash -c './start_challenge ${SERVER_IP} . ${num} ${TEAM_RIGHT}"
+    opt="${opt} ${RIGHT_TEAM_A}:${TAG}"
 
     RIGHT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.r_${TEAM_RIGHT}_player"
 
