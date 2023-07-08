@@ -14,4 +14,4 @@ RUN chmod o=rx /home/ -R
 COPY bin /home/
 USER team
 WORKDIR /home/
-CMD ["bash", "-c", "./start_coop ${ip} ${run_path} ${num} ${name}"]
+CMD ["bash", "-c", "./start_challenge ${ip} ${run_path} ${num} ${name}"]

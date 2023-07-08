@@ -11,7 +11,8 @@ printHelp() {
   echo "
      Usage : ./build_teams.sh [OPTIONS]
      Options:
-        -t , --tag
+        -t , --tag : Docker image tag
+        -f , --f : Dockerfile name
     "
 }
 
