@@ -297,12 +297,12 @@ RUN_LEFT_TEAM() {
   # team name left example : team1_team2
   LEFT_TEAM_A=$(cut -d'_' -f1 <<< "$TEAM_LEFT")
   LEFT_TEAM_B=$(cut -d'_' -f2 <<< "$TEAM_LEFT")
-  echo $LEFT_TEAM_A
-  echo $LEFT_TEAM_B
+  TEAM_LEFT_2="${LEFT_TEAM_A:0:3}_${LEFT_TEAM_B:0:3}"
+
   echo $TAG
   for num in {1..6}; do
     opt=""
-    opt="${opt} --name ${NETWORK}_team_${TEAM_LEFT}_${num}"
+    opt="${opt} --name ${NETWORK}_t_${TEAM_LEFT_2}_${num}"
     opt="${opt} --network ${NETWORK}"
 
     if (($USE_RESOURCE_LIMIT)); then
@@ -310,17 +310,17 @@ RUN_LEFT_TEAM() {
       opt="${opt} --cpuset-cpus ${LEFT_FIRST_CORE}-${LEFT_LAST_CORE}"
     fi
 
-    opt="${opt} -e num=${num} -e ip=${SERVER_IP} -e name=${TEAM_LEFT}"
+    opt="${opt} -e num=${num} -e ip=${SERVER_IP} -e name=${TEAM_LEFT_2}"
     opt="${opt} ${LEFT_TEAM_A}:${TAG}"
 
-    LEFT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.l_${TEAM_LEFT}_player"
+    LEFT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.l_${TEAM_LEFT_2}_player"
 
     RUN "docker run ${opt}" -bg -nc -co "${EVENT_DIR}/${LEFT_LOG_FILE_NAME}${num}.log"
     sleep 2
   done
   for num in {7..12}; do
     opt=""
-    opt="${opt} --name ${NETWORK}_team_${TEAM_LEFT}_${num}"
+    opt="${opt} --name ${NETWORK}_t_${TEAM_LEFT_2}_${num}"
     opt="${opt} --network ${NETWORK}"
 
     if (($USE_RESOURCE_LIMIT)); then
@@ -328,10 +328,10 @@ RUN_LEFT_TEAM() {
       opt="${opt} --cpuset-cpus ${LEFT_FIRST_CORE}-${LEFT_LAST_CORE}"
     fi
 
-    opt="${opt} -e num=${num} -e ip=${SERVER_IP} -e name=${TEAM_LEFT}"
+    opt="${opt} -e num=${num} -e ip=${SERVER_IP} -e name=${TEAM_LEFT_2}"
     opt="${opt} ${LEFT_TEAM_B}:${TAG}"
 
-    LEFT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.l_${TEAM_LEFT}_player"
+    LEFT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.l_${TEAM_LEFT_2}_player"
 
     RUN "docker run ${opt}" -bg -nc -co "${EVENT_DIR}/${LEFT_LOG_FILE_NAME}${num}.log"
     sleep 2
@@ -341,9 +341,11 @@ RUN_LEFT_TEAM() {
 RUN_RIGHT_TEAM() {
   RIGHT_TEAM_A=$(cut -d'_' -f1 <<< "$TEAM_RIGHT")
   RIGHT_TEAM_B=$(cut -d'_' -f2 <<< "$TEAM_RIGHT")
+  TEAM_RIGHT_2="${RIGHT_TEAM_A:0:3}_${RIGHT_TEAM_B:0:3}"
+  
   for num in {1..6}; do
     opt=""
-    opt="${opt} --name ${NETWORK}_team_${TEAM_RIGHT}_${num}"
+    opt="${opt} --name ${NETWORK}_t_${TEAM_RIGHT_2}_${num}"
     opt="${opt} --network ${NETWORK}"
 
     if (($USE_RESOURCE_LIMIT)); then
@@ -351,17 +353,17 @@ RUN_RIGHT_TEAM() {
       opt="${opt} --cpuset-cpus ${RIGHT_FIRST_CORE}-${RIGHT_LAST_CORE}"
     fi
 
-    opt="${opt} -e num=${num} -e ip=${SERVER_IP} -e name=${TEAM_RIGHT}"
+    opt="${opt} -e num=${num} -e ip=${SERVER_IP} -e name=${TEAM_RIGHT_2}"
     opt="${opt} ${RIGHT_TEAM_A}:${TAG}"
 
-    RIGHT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.r_${TEAM_RIGHT}_player"
+    RIGHT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.r_${TEAM_RIGHT_2}_player"
 
     RUN "docker run ${opt}" -bg -nc -co "${EVENT_DIR}/${RIGHT_LOG_FILE_NAME}${num}.log"
     sleep 2
   done
     for num in {7..12}; do
     opt=""
-    opt="${opt} --name ${NETWORK}_team_${TEAM_RIGHT}_${num}"
+    opt="${opt} --name ${NETWORK}_t_${TEAM_RIGHT_2}_${num}"
     opt="${opt} --network ${NETWORK}"
 
     if (($USE_RESOURCE_LIMIT)); then
@@ -369,10 +371,10 @@ RUN_RIGHT_TEAM() {
       opt="${opt} --cpuset-cpus ${RIGHT_FIRST_CORE}-${RIGHT_LAST_CORE}"
     fi
 
-    opt="${opt} -e num=${num} -e ip=${SERVER_IP} -e name=${TEAM_RIGHT}"
+    opt="${opt} -e num=${num} -e ip=${SERVER_IP} -e name=${TEAM_RIGHT_2}"
     opt="${opt} ${RIGHT_TEAM_B}:${TAG}"
 
-    RIGHT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.r_${TEAM_RIGHT}_player"
+    RIGHT_LOG_FILE_NAME="${TIME_STAMP}_${NETWORK}.r_${TEAM_RIGHT_2}_player"
 
     RUN "docker run ${opt}" -bg -nc -co "${EVENT_DIR}/${RIGHT_LOG_FILE_NAME}${num}.log"
     sleep 2
