@@ -6,7 +6,7 @@ NETWORK=
 GAME_LIST=
 ROOT_LOG_DIR=${here}/logs
 ROOT_EVENT_DIR=${here}/events
-TAG='latest'
+TAG='challenge'
 
 printHelp() {
   echo "
