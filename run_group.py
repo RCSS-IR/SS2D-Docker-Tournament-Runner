@@ -6,6 +6,7 @@ import subprocess
 from random import choices
 import string
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 HERE = os.getcwd()
@@ -81,10 +82,18 @@ def run(command):
     subprocess.run(command, shell=True, check=True)
 
 
-def remove_game():
-    run(f"tail {GAME_LIST} -n +2 > {GAME_LIST}_tmp")
+def remove_game(n):
+    run(f"tail {GAME_LIST} -n +{n+1} > {GAME_LIST}_tmp")
     run(f"cat {GAME_LIST}_tmp > {GAME_LIST}")
     run(f"rm {GAME_LIST}_tmp")
+
+
+def execute_game(network, params):
+    print(f"Running on network: {network}")
+    print(params)
+    print("Starting game...")
+    run(f"./run_game.sh {params}")
+    print("Game finished.")
 
 
 def main():
@@ -102,40 +111,51 @@ def main():
 
     counter = 0
     while True:
-        counter += 1
         with open(GAME_LIST, 'r') as file:
-            line = file.readline().strip()
+            lines = file.readlines()
 
-        if not line:
+        if not lines:
             break
 
-        time_stamp = f"G{''.join(choices(string.ascii_letters + string.digits, k=5))}P"
-        game_conf = line.split()
-        group_name = game_conf[0]
-        log_dir = f"{ROOT_LOG_DIR}/{group_name}"
-        event_dir = f"{ROOT_EVENT_DIR}/{group_name}"
+        number_of_games = len(lines)
+        games_per_network = len(NETWORKS)
+        game_chunks = [lines[i:i + games_per_network] for i in range(0, number_of_games, games_per_network)]
+        print(game_chunks)
+        for chunk in game_chunks:
+            counter += 1
+            time_stamp = f"G{''.join(choices(string.ascii_letters + string.digits, k=5))}P"
 
-        run(f"mkdir -p {log_dir}")
-        run(f"mkdir -p {event_dir}")
-        run(f"chmod 777 {log_dir} -R")
-        run(f"chmod 777 {event_dir} -R")
+            with ThreadPoolExecutor() as executor:
+                futures = []
+                for i, line in enumerate(chunk):
+                    game_conf = line.split()
+                    group_name = game_conf[0]
+                    log_dir = f"{ROOT_LOG_DIR}/{group_name}"
+                    event_dir = f"{ROOT_EVENT_DIR}/{group_name}"
 
-        print("**********************************************************")
-        print(line)
+                    run(f"mkdir -p {log_dir}")
+                    run(f"mkdir -p {event_dir}")
+                    run(f"chmod 777 {log_dir} -R")
+                    run(f"chmod 777 {event_dir} -R")
 
-        for network in NETWORKS:
-            params = f"-ts {time_stamp} -st {game_conf[1]} -gt {game_conf[2]} -ld {log_dir} -ed {event_dir} -l {game_conf[3]} -r {game_conf[4]} -n {network} -t {TAG}"
-            print(f"Running on network: {network}")
-            print(params)
-            # run(f"./run_game.sh {params}")
+                    print("**********************************************************")
+                    print(line.strip())
 
-        print("**********************************************************")
+                    network = NETWORKS[i % len(NETWORKS)]
+                    params = (f"-ts {time_stamp} -st {game_conf[1]} -gt {game_conf[2]} -ld {log_dir} "
+                              f"-ed {event_dir} -l {game_conf[3]} -r {game_conf[4]} -n {network} -t {TAG}")
+                    futures.append(executor.submit(execute_game, network, params))
 
-        remove_game()
-        time.sleep(1)
+                for future in as_completed(futures):
+                    future.result()
+            
+            print("**********************************************************")
+            remove_game(len(chunk))
+            time.sleep(1)
 
 
 if __name__ == "__main__":
     main()
+# ./run_group.py -ns server1,server2,server3 -gl games/test_sync -ld $(pwd)/log -ed $(pwd)/log
 # ./run_group.py -ns server1,server2 -gl games/test_sync -ld $(pwd)/log -ed $(pwd)/log
 # ./run_group.py -n server1 -gl games/test_sync -ld $(pwd)/log -ed $(pwd)/log
