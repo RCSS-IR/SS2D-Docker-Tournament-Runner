@@ -94,6 +94,7 @@ def execute_game(network, params):
     print("Starting game...")
     run(f"./run_game.sh {params}")
     print("Game finished.")
+    time.sleep(1)
 
 
 def main():
@@ -138,7 +139,7 @@ def main():
                     run(f"chmod 777 {log_dir} -R")
                     run(f"chmod 777 {event_dir} -R")
 
-                    print("**********************************************************")
+                    print(f"*************************** Next Game C{counter} - G{i} ****************************")
                     print(line.strip())
 
                     network = NETWORKS[i % len(NETWORKS)]
@@ -148,14 +149,14 @@ def main():
 
                 for future in as_completed(futures):
                     future.result()
-            
-            print("**********************************************************")
+
+            print(f"*************************** Next Chunk {counter} ****************************")
             remove_game(len(chunk))
             time.sleep(1)
 
-
 if __name__ == "__main__":
     main()
-# ./run_group.py -ns server1,server2,server3 -gl games/test_sync -ld $(pwd)/log -ed $(pwd)/log
-# ./run_group.py -ns server1,server2 -gl games/test_sync -ld $(pwd)/log -ed $(pwd)/log
-# ./run_group.py -n server1 -gl games/test_sync -ld $(pwd)/log -ed $(pwd)/log
+
+# ./run_group.py -ns server1,server2,server3 -gl games/test -ld $(pwd)/log -ed $(pwd)/log
+# ./run_group.py -ns server1,server2 -gl games/test -ld $(pwd)/log -ed $(pwd)/log
+# ./run_group.py -n server1 -gl games/test -ld $(pwd)/log -ed $(pwd)/log
