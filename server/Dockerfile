@@ -1,6 +1,4 @@
-FROM ubuntu:20.04
-
-MAINTAINER Nader nader.zare@gmail.com
+FROM ubuntu:22.04
 
 ENV config_file=server.conf \
     DATE_FORMAT="%Y%m%d%H%M%S"
