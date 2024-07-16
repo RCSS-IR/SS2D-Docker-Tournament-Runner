@@ -13,9 +13,9 @@ RUN apt-get -y update && \
     flex \
     bison \
     libboost-all-dev \
-    automake-1.15 \
     make \
     cmake \
+    automake \
     iputils-ping
 
 RUN useradd -m -s /bin/bash ss2dtr && \
