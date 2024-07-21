@@ -264,7 +264,7 @@ runServer() {
   opt=""
   opt="${opt} --network $NETWORK --ip ${SERVER_IP}"
   opt="${opt} --hostname ${HOST_NAME} -p ${SERVER_PORT}:6000/udp"
-  opt="${opt} -v ${LOG_DIR}:/home/nader/log --name ${NETWORK}_server"
+  opt="${opt} -v ${LOG_DIR}:/home/ss2dtr/log --name ${NETWORK}_server"
   opt="${opt} -e config_file=${SERVER_CONF} -e DATE_FORMAT=\"${TIME_STAMP}_${NETWORK}_\""
   opt="${opt} rcssserver:latest"
   
