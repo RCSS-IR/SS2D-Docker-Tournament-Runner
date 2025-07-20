@@ -28,7 +28,7 @@ SERVER_CONF=
 
 # if use resource limit is defined use it otherwise use 0 
 if [ -z "$USE_RESOURCE_LIMIT" ]; then
-  USE_RESOURCE_LIMIT=0
+  USE_RESOURCE_LIMIT=1
 fi
 LEFT_TEAM_RAM_LIMIT=
 RIGHT_TEAM_RAM_LIMIT=
