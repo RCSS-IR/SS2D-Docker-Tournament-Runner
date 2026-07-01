@@ -1,9 +1,10 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 ENV pp=6000
 ENV cp=6002
 ENV ip=127.0.0.1
 ENV num=1
 ENV run_path=.
+RUN apt-get update && apt-get install -y --no-install-recommends adduser passwd && rm -rf /var/lib/apt/lists/*
 RUN adduser --gecos "" --disabled-password team
 RUN passwd -d team
 RUN echo 'root:234' | chpasswd

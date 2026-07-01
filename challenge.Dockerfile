@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 ENV pp=6000
 ENV cp=6002
 ENV ip=127.0.0.1

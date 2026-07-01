@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 ENV config_file=server.conf \
     DATE_FORMAT="%Y%m%d%H%M%S"
